@@ -141,11 +141,11 @@ resource "aws_subnet" "public1" {
 
 }
 ```
+```sh 
 ###########################################################################
 #Subnet Creation public 2
 ###########################################################################
 
-```sh 
 resource "aws_subnet" "public2" {
 
   vpc_id = aws_vpc.main.id
