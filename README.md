@@ -71,11 +71,11 @@ You can modify the  values  of tfvars file accordingly as per your requirements.
 
 Lets start creating vpc.tf file with the details below.
 
-
+```sh
 ###########################################################################
 #Vpc Creation
 ###########################################################################
-```sh 
+ 
 resource "aws_vpc" "main" {
   cidr_block       = var.vpc_cidr
   instance_tenancy = "default"
@@ -92,11 +92,12 @@ lifecycle {
 
 To find all the avilabilty zone  inside the selected aws region using following code 
 
+```sh 
 ###########################################################################
 #List of AWS Availability Zones in this account
 ##########################################################################
 
-```sh 
+
 
 data "aws_availability_zones" "az" {
   state = "available"
@@ -104,12 +105,11 @@ data "aws_availability_zones" "az" {
 ```
 To create Internet GateWay For VPC
 
-
+```sh 
 ###########################################################################
 #Igw Creation
 ###########################################################################
 
-```sh 
 resource "aws_internet_gateway" "igw" {
 
   vpc_id = aws_vpc.main.id
@@ -123,12 +123,12 @@ lifecycle {
 ```
 Here in this infrastructre we  will create 3 public and 3 private subnets .This sample was meant for regions having 6 availability zone. I have used "us-east-1". You can change the region name according to your requirement, Also, we already mentioned subnet bit in tfvars file so there is no need to calculate CIDR for subnet division .  Here the CIDR range of subnet is /19.
 
-
+```sh
 ###########################################################################
 #Subnet Creation public 1
 ###########################################################################
 
-```sh 
+ 
 resource "aws_subnet" "public1" {
 
   vpc_id = aws_vpc.main.id
@@ -158,11 +158,12 @@ resource "aws_subnet" "public2" {
 
 }
 ```
+```sh 
 ###########################################################################
 #Subnet Creation public 3
 ###########################################################################
 
-```sh 
+
 resource "aws_subnet" "public3" {
 
   vpc_id = aws_vpc.main.id
@@ -175,11 +176,12 @@ resource "aws_subnet" "public3" {
 
 }
 ```
+```sh 
 ###########################################################################
 #Subnet Creation private1
 ###########################################################################
 
-```sh 
+
 resource "aws_subnet" "private1" {
 
   vpc_id = aws_vpc.main.id
@@ -191,11 +193,12 @@ resource "aws_subnet" "private1" {
 
 }
 ```
+```sh 
 ###########################################################################
 #Subnet Creation private2
 ###########################################################################
 
-```sh 
+
 resource "aws_subnet" "private2" {
 
   vpc_id = aws_vpc.main.id
@@ -208,11 +211,11 @@ resource "aws_subnet" "private2" {
 }
 
 ```
+```sh 
 ###########################################################################
 #Subnet Creation private3
 ###########################################################################
 
-```sh 
 resource "aws_subnet" "private3" {
 
   vpc_id = aws_vpc.main.id
@@ -230,7 +233,6 @@ resource "aws_subnet" "private3" {
 #Elastic Ip Creation
 ###########################################################################
 
-```sh 
 resource "aws_eip" "eip" {
 
   vpc      = true
@@ -240,11 +242,11 @@ resource "aws_eip" "eip" {
 }
 ```
 
-
+```sh 
 ##########################################################################
 #Allocate Elastic IP to NAT Gateway
 ##########################################################################
-```sh 
+
 
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.eip.id
@@ -257,10 +259,10 @@ resource "aws_nat_gateway" "nat" {
 ```
 Now we are creating 2 route tables one for public subnets and another one for private subnet.
 
+```sh 
 #########################################################################
 #Public Route table
 #########################################################################
-```sh
 resource "aws_route_table" "route1" {
   vpc_id = aws_vpc.main.id
 
@@ -275,11 +277,12 @@ resource "aws_route_table" "route1" {
 
 }
 ```
+```sh 
 ###########################################################################
 #Private Route table
 ###########################################################################
 
-```sh 
+
 resource "aws_route_table" "route2" {
   vpc_id = aws_vpc.main.id
 
@@ -297,11 +300,11 @@ resource "aws_route_table" "route2" {
 
 Now the next step is route tavle associations,
 
+```sh
 ################################################################################
 #Public Route table associations
 ################################################################################
 
-```sh
 resource "aws_route_table_association" "public1" {
   subnet_id      = aws_subnet.public1.id
   route_table_id = aws_route_table.route1.id
@@ -317,11 +320,11 @@ resource "aws_route_table_association" "public3" {
   route_table_id = aws_route_table.route1.id
 }
 ```
+```sh
 ################################################################################
 # Private Route table associations
 ################################################################################
-
-```sh 
+ 
 resource "aws_route_table_association" "private1" {
   subnet_id      = aws_subnet.private1.id
   route_table_id = aws_route_table.route2.id
@@ -344,10 +347,10 @@ The next step is creation of 3 EC2 instances in our custom vpc "BLog-Vpc",
 
 In EC2 launcing the initial step is  creation of key pair . Here I have used ssh-keygen for creating ssh key and uploaded it using file function in terraform.
 
+```sh 
 ################################################################################
 #Key Pair creation
 ################################################################################
-```sh 
 resource "aws_key_pair" "key" {
 
   key_name   = "terraform"
@@ -360,10 +363,10 @@ resource "aws_key_pair" "key" {
 ```
 Now we can create 3 security group for our instances. 
 
-###############################################################################
-# Security Group-Bastion server
-###############################################################################
 ```sh
+###############################################################################
+#Security Group-Bastion server
+###############################################################################
 resource "aws_security_group" "bastion" {
 
   name        = "bastion"
@@ -393,10 +396,11 @@ resource "aws_security_group" "bastion" {
   }
 }
 ```
+```sh
 ############################################################################
 #Security group webserver
 ############################################################################
-```sh
+
 resource "aws_security_group" "webserver" {
 
   name        = "webserver"
@@ -444,11 +448,11 @@ resource "aws_security_group" "webserver" {
   }
 }
 ```
-
+```sh
 #############################################################################
 #Security Group -Database Server
 #############################################################################
-```sh
+
 resource "aws_security_group" "database" {
 
   name        = "database"
@@ -478,10 +482,11 @@ resource "aws_security_group" "database" {
   }
 }
 ```
+```sh
 ############################################################################
 #Ec2 instance creation -Bastion server
 #############################################################################
-```sh
+
 resource "aws_instance" "Bastion-Server" {
 
   ami                          = "ami-0443305dabd4be2bc"
@@ -495,10 +500,11 @@ resource "aws_instance" "Bastion-Server" {
   }
 }
 ```
+```sh
 ############################################################################
 #Ec2 instance creation -webserver
 ############################################################################
-```sh
+
 resource "aws_instance" "weberver" {
 
   ami                          = "ami-0443305dabd4be2bc"
@@ -512,10 +518,11 @@ resource "aws_instance" "weberver" {
   }
 }
 ```
+```sh
 ############################################################################
 #Ec2 instance creation -DBserver
 ############################################################################
-```sh
+
 resource "aws_instance" "dbserver" {
 
   ami                          = "ami-0443305dabd4be2bc"
