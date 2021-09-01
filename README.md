@@ -553,4 +553,11 @@ terraform apply
 
 # Conclusion
 
-Here we  have created Aws resources using terraform without logging to the AWS console. The only details that we have is an IAM user credentails. From this project we can undestood one of the important  Iaac  tool Terraform
+Here we  have created Aws resources using terraform without logging to  AWS console. The only details that we have is an IAM user credentails. From this project we can undestood one of the important  Iaac  tool Terraform,
+
+⚙️ Connect with Me
+ 
+  <a href="https://www.linkedin.com/in/sruthy-manohar-9a9b54150/">
+     <p> <img align="left" alt="Abhishek's LinkedIN" width="22px" src="https://raw.githubusercontent.com/peterthehan/peterthehan/master/assets/linkedin.svg" /> </p>
+   </a>       
+        
