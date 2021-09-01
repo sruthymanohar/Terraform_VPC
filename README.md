@@ -13,7 +13,7 @@ Here is a simple project on how to create a custom vpc with ec2 instances via te
 - All Ec2 resource creations are done using terraform
 - Each subnet CIDR block created automatically using subnetbit Function 
 - AWS informations are defined using tfvars file and can easily changed 
-- We can easily migrate the  infrastrucre to another region by chaging provides details.
+- We can easily migrate the  infrastrucre to another region by chaging provider details.
 - All the resoruce names are appended with project name so we can easily identify the -resources
 
 ## Terraform installtion 
